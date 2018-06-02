@@ -9,57 +9,29 @@ namespace csharp
         [Test]
         public void foo()
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "foo", SellIn = 0, Quality = 0 } };
+            IList<Item> Items = new List<Item> { new Item { Name = "foo", SellIn = 0, Quality = 2 } };
             GildedRose app = new GildedRose(Items);
             app.UpdateQuality();
-            Assert.AreEqual("foo", Items[0].Name);            
-        }
-
-        [Test]
-        public void pasadaFechaVenta_QualityDecrementaX2()
-        {
-            IList<Item> Items = new List<Item> { new Item { Name = "foo", SellIn = 0, Quality = 4 } };
-            GildedRose app = new GildedRose(Items);
-            app.UpdateQuality();
-            Assert.AreEqual(2, Items[0].Quality);
-        }
-
-        [Test]
-        public void nuncaNegativaQuality()
-        {
-            IList<Item> Items = new List<Item> { new Item { Name = "foo", SellIn = 0, Quality = 0 } };
-            GildedRose app = new GildedRose(Items);
+            Assert.AreEqual("foo", Items[0].Name);
+            Assert.AreEqual(-1, Items[0].SellIn);
+            Assert.AreEqual(0, Items[0].Quality);
             app.UpdateQuality();
             Assert.AreEqual(0, Items[0].Quality);
         }
 
         [Test]
-        public void aumentaQualityAgedbrie()
+        public void agedBrie()
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "Aged Brie", SellIn = 2, Quality = 2 } };
+            IList<Item> Items = new List<Item> { new Item { Name = "Aged Brie", SellIn = 1, Quality = 47 } };
             GildedRose app = new GildedRose(Items);
             app.UpdateQuality();
-            Assert.AreEqual(3, Items[0].Quality);
-        }
-
-        [Test]
-        public void aumentaQualityAgedbrieX2_pasadaFechaVenta()
-        {
-            IList<Item> Items = new List<Item> { new Item { Name = "Aged Brie", SellIn = 0, Quality = 2 } };
-            GildedRose app = new GildedRose(Items);
+            Assert.AreEqual(48, Items[0].Quality);
             app.UpdateQuality();
-            Assert.AreEqual(4, Items[0].Quality);
-        }
-
-        [Test]
-        public void quality_NoSuperior50()
-        {
-            IList<Item> Items = new List<Item> { new Item { Name = "Aged Brie", SellIn = 0, Quality = 50 } };
-            GildedRose app = new GildedRose(Items);
+            Assert.AreEqual(50, Items[0].Quality);
             app.UpdateQuality();
             Assert.AreEqual(50, Items[0].Quality);
         }
-        
+
         [Test]
         public void sulfuras()
         {
@@ -67,34 +39,44 @@ namespace csharp
             GildedRose app = new GildedRose(Items);
             app.UpdateQuality();
             Assert.AreEqual(1, Items[0].SellIn);
-            Assert.AreEqual(1, Items[0].Quality);
-        }
-        
-        [Test]
-        public void menosDe10Dias_BackstagePasses()
-        {
-            IList<Item> Items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 10, Quality = 2 } };
-            GildedRose app = new GildedRose(Items);
-            app.UpdateQuality();
-            Assert.AreEqual(4, Items[0].Quality);
+            Assert.AreEqual(80, Items[0].Quality);
         }
 
         [Test]
-        public void menosDe5Dias_BackstagePasses()
+        public void backstagePasses()
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 5, Quality = 2 } };
+            IList<Item> Items = new List<Item> {
+                new Item
+                {
+                    Name = "Backstage passes to a TAFKAL80ETC concert",
+                    SellIn = 11,
+                    Quality = 2
+                },
+                new Item
+                {
+                    Name = "Backstage passes to a TAFKAL80ETC concert",
+                    SellIn = 10,
+                    Quality = 2
+                },
+                new Item
+                {
+                    Name = "Backstage passes to a TAFKAL80ETC concert",
+                    SellIn = 5,
+                    Quality = 2
+                },
+                new Item
+                {
+                    Name = "Backstage passes to a TAFKAL80ETC concert",
+                    SellIn = 0,
+                    Quality = 5
+                }
+            };
             GildedRose app = new GildedRose(Items);
             app.UpdateQuality();
-            Assert.AreEqual(5, Items[0].Quality);
-        }
-
-        [Test]
-        public void fechaVentaPasada_BackstagePasses()
-        {
-            IList<Item> Items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 0, Quality = 5 } };
-            GildedRose app = new GildedRose(Items);
-            app.UpdateQuality();
-            Assert.AreEqual(0, Items[0].Quality);
+            Assert.AreEqual(3, Items[0].Quality);
+            Assert.AreEqual(4, Items[1].Quality);
+            Assert.AreEqual(5, Items[2].Quality);
+            Assert.AreEqual(0, Items[3].Quality);
         }
         
         [Test]
@@ -104,15 +86,6 @@ namespace csharp
             GildedRose app = new GildedRose(Items);
             app.UpdateQuality();
             Assert.AreEqual(3, Items[0].Quality);
-        }
-
-        [Test]
-        public void sulfarasInmutableQuality80()
-        {
-            IList<Item> Items = new List<Item> { new Item { Name = "Sulfuras, Hand of Ragnaros", SellIn = 5, Quality = 5 } };
-            GildedRose app = new GildedRose(Items);
-            app.UpdateQuality();
-            Assert.AreEqual(80, Items[0].Quality);
         }
     }
 }
