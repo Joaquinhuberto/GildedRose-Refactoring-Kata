@@ -14,82 +14,63 @@ namespace csharp
         {
             for (var i = 0; i < Items.Count; i++)
             {
-                if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                {
-                    if (Items[i].Quality > 0)
-                    {
-                        if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
+                switch (Items[i].Name)
+                { 
+                    case "Aged Brie":
                         {
-                            Items[i].Quality = Items[i].Quality - 1;
-                            if (Items[i].Quality > 0 && Items[i].Name == "Conjured")
+                            if (Items[i].Quality < 50)
                             {
-                                Items[i].Quality = Items[i].Quality - 1;
+                                Items[i].Quality = Items[i].Quality + 1;
                             }
-                        }
-                        else
-                        {
-                            Items[i].Quality = 80;
-                        }
-                    }
-                }
-                else
-                {
-                    if (Items[i].Quality < 50)
-                    {
-                        Items[i].Quality = Items[i].Quality + 1;
-
-                        if (Items[i].Name == "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].SellIn < 11)
+                            if (Items[i].Quality < 50 && Items[i].SellIn == 0)
                             {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
+                                Items[i].Quality = Items[i].Quality + 1;
                             }
-
-                            if (Items[i].SellIn < 6)
-                            {
-                                if (Items[i].Quality < 50)
-                                {
-                                    Items[i].Quality = Items[i].Quality + 1;
-                                }
-                            }
+                            Items[i].SellIn = Items[i].SellIn - 1;
                         }
-                    }
-                }
+                        break;
 
-                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                {
-                    Items[i].SellIn = Items[i].SellIn - 1;
-                }
-
-                if (Items[i].SellIn < 0)
-                {
-                    if (Items[i].Name != "Aged Brie")
-                    {
-                        if (Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (Items[i].Quality > 0)
-                            {
-                                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                                {
-                                    Items[i].Quality = Items[i].Quality - 1;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Items[i].Quality = Items[i].Quality - Items[i].Quality;
-                        }
-                    }
-                    else
-                    {
+                    case "Backstage passes to a TAFKAL80ETC concert":
                         if (Items[i].Quality < 50)
                         {
                             Items[i].Quality = Items[i].Quality + 1;
+                            if (Items[i].SellIn < 11 && Items[i].Quality < 50)
+                            {
+                                Items[i].Quality = Items[i].Quality + 1;
+                                if (Items[i].SellIn < 6 && Items[i].Quality < 50)
+                                {
+                                    Items[i].Quality = Items[i].Quality + 1;
+                                }
+                            }
                         }
-                    }
+                        if (Items[i].SellIn == 0)
+                        {
+                            Items[i].Quality = Items[i].Quality - Items[i].Quality;
+                        }
+                        Items[i].SellIn = Items[i].SellIn - 1;
+                        break;
+
+                    case "Sulfuras, Hand of Ragnaros":
+                        Items[i].Quality = 80;
+                        break;
+
+                    case "Conjured":
+                        Items[i].Quality = Items[i].Quality - 2;
+                        Items[i].SellIn = Items[i].SellIn - 1;
+                        break;
+
+                    default:
+                        Items[i].Quality = Items[i].Quality - 1; 
+                        if (Items[i].SellIn == 0)
+                        {
+                            Items[i].Quality = Items[i].Quality - 1;
+                        }
+                        Items[i].SellIn = Items[i].SellIn - 1;
+                        break;
+                }
+                if (Items[i].Quality < 0)
+                {
+                    Items[i].Quality = 0;
                 }
             }
         }
